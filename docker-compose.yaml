@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+
+  shortener:
+    build: 
+      dockerfile: docker/shortener/Dockerfile
+      context: ./
+    image: shortener
+    command: ["python", "main.py"]
+    volumes:
+      - ./shortener/:/opt/app/
+    ports:
+      - 7000:5000
+    env_file:
+      - .env
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-shortener
+    # ports:
+    #   - 3306:3306
+    environment:
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    volumes:
+      - mysql-shorter:/var/lib/mysql
+
+volumes:
+  mysql-shorter:
